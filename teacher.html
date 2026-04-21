@@ -607,16 +607,24 @@
                 html = '<p style="color: #bbb;">No questions added yet</p>';
             } else {
                 recentQuestions.forEach((q, idx) => {
+                    // Normalize options (handle both lowercase and uppercase keys)
+                    const opts = q.options || {};
+                    const a = opts.a || opts.A || '';
+                    const b = opts.b || opts.B || '';
+                    const c = opts.c || opts.C || '';
+                    const d = opts.d || opts.D || '';
+                    const correctUpper = (q.correct || 'a').toUpperCase();
+                    
                     html += `<div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 8px 0; border-radius: 6px; border-left: 3px solid #22C55E;">
                         <p style="color: #22C55E; font-size: 12px; margin-bottom: 5px;">📚 ${q.class || 'All'} | Q${questions.length - idx}</p>
                         <p style="color: #fff; font-size: 14px;">${q.text}</p>
                         <div style="color: #aaa; font-size: 12px; margin-top: 5px;">
-                            <span style="color: ${q.correct === 'a' ? '#22C55E' : '#aaa'};">A) ${q.options.a}</span> | 
-                            <span style="color: ${q.correct === 'b' ? '#22C55E' : '#aaa'};">B) ${q.options.b}</span> | 
-                            <span style="color: ${q.correct === 'c' ? '#22C55E' : '#aaa'};">C) ${q.options.c}</span> | 
-                            <span style="color: ${q.correct === 'd' ? '#22C55E' : '#aaa'};">D) ${q.options.d}</span>
+                            <span style="color: ${correctUpper === 'A' ? '#22C55E' : '#aaa'};">A) ${a}</span> | 
+                            <span style="color: ${correctUpper === 'B' ? '#22C55E' : '#aaa'};">B) ${b}</span> | 
+                            <span style="color: ${correctUpper === 'C' ? '#22C55E' : '#aaa'};">C) ${c}</span> | 
+                            <span style="color: ${correctUpper === 'D' ? '#22C55E' : '#aaa'};">D) ${d}</span>
                         </div>
-                        <p style="color: #22C55E; font-size: 12px; margin-top: 5px;">✓ Correct: ${q.correct.toUpperCase()}</p>
+                        <p style="color: #22C55E; font-size: 12px; margin-top: 5px;">✓ Correct: ${correctUpper}</p>
                     </div>`;
                 });
                 if (questions.length > 5) {
@@ -639,23 +647,33 @@
                 return;
             }
 
-            questionsList.innerHTML = questions.map((q, index) => `
-                <div class="question-item">
-                    <h3>Question ${index + 1}</h3>
-                    <p style="color: #22C55E; font-size: 12px;">📚 Class: <strong>${q.class || 'All'}</p>
-                    <p><strong>${q.text}</strong></p>
-                    <div class="options">
-                        <p>A) ${q.options.a}</p>
-                        <p>B) ${q.options.b}</p>
-                        <p>C) ${q.options.c}</p>
-                        <p>D) ${q.options.d}</p>
+            questionsList.innerHTML = questions.map((q, index) => {
+                // Normalize options (handle both lowercase and uppercase keys)
+                const opts = q.options || {};
+                const a = opts.a || opts.A || '';
+                const b = opts.b || opts.B || '';
+                const c = opts.c || opts.C || '';
+                const d = opts.d || opts.D || '';
+                const correctUpper = (q.correct || 'a').toUpperCase();
+                
+                return `
+                    <div class="question-item">
+                        <h3>Question ${index + 1}</h3>
+                        <p style="color: #22C55E; font-size: 12px;">📚 Class: <strong>${q.class || 'All'}</p>
+                        <p><strong>${q.text}</strong></p>
+                        <div class="options">
+                            <p style="color: ${correctUpper === 'A' ? '#22C55E' : '#ddd'};">A) ${a}</p>
+                            <p style="color: ${correctUpper === 'B' ? '#22C55E' : '#ddd'};">B) ${b}</p>
+                            <p style="color: ${correctUpper === 'C' ? '#22C55E' : '#ddd'};">C) ${c}</p>
+                            <p style="color: ${correctUpper === 'D' ? '#22C55E' : '#ddd'};">D) ${d}</p>
+                        </div>
+                        <p class="correct-answer">Correct Answer: ${correctUpper}</p>
+                        <div class="actions">
+                            <button class="btn btn-danger" onclick="deleteQuestion(${q.id})" style="padding: 8px 15px; font-size: 12px;">Delete</button>
+                        </div>
                     </div>
-                    <p class="correct-answer">Correct Answer: ${q.correct.toUpperCase()}</p>
-                    <div class="actions">
-                        <button class="btn btn-danger" onclick="deleteQuestion(${q.id})" style="padding: 8px 15px; font-size: 12px;">Delete</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function deleteQuestion(questionId) {
@@ -798,18 +816,20 @@ function deleteClass(className) {
 
         function clearAllData() {
             if (confirm('⚠️ Are you sure? This will delete ALL questions, classes and cannot be undone!')) {
-                storage.removeItem('examQuestions');
-                storage.removeItem('examSettings');
-                storage.removeItem('examClasses');
-                storage.removeItem('studentInfo');
-                storage.removeItem('examResults');
+                // Clear all storage
+                localStorage.removeItem('examQuestions');
+                localStorage.removeItem('examSettings');
+                localStorage.removeItem('examClasses');
+                localStorage.removeItem('studentInfo');
+                localStorage.removeItem('examResults');
+                storage.data = {};
                 
                 // Reset to defaults: 1 minute timer
                 const settings = { examDuration: 1, numQuestions: 3 };
-                storage.setItem('examSettings', JSON.stringify(settings));
+                localStorage.setItem('examSettings', JSON.stringify(settings));
                 
                 const message = document.getElementById('settingsMessage');
-                message.textContent = '✅ All data cleared and reset to defaults (1 minute)';
+                message.textContent = '✅ All data cleared! Timer set to 1 minute.';
                 message.className = 'message success';
                 
                 loadQuestions();
@@ -1231,13 +1251,21 @@ function deleteClass(className) {
 
             let previewHTML = `<h3 style="color: #22C55E; margin-top: 0;">Found ${questions.length} Questions:</h3>`;
             questions.forEach((q, idx) => {
+                // Normalize options
+                const opts = q.options || {};
+                const a = opts.a || opts.A || '?';
+                const b = opts.b || opts.B || '?';
+                const c = opts.c || opts.C || '?';
+                const d = opts.d || opts.D || '?';
+                const correctUpper = (q.correct || '?').toUpperCase();
+                
                 previewHTML += `<div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 8px 0; border-radius: 6px;">`;
                 previewHTML += `<p style="color: #22C55E; margin: 5px 0; font-weight: 600;">Q${idx + 1}) ${q.text || 'No text'}</p>`;
                 previewHTML += `<p style="color: #22C55E; margin: 3px 0; font-size: 12px;">📚 Class: <strong>${q.class || 'All'}</strong></p>`;
                 previewHTML += `<p style="color: #ddd; margin: 3px 0; font-size: 12px;">`;
-                previewHTML += `A) ${q.options.a || '?'} | B) ${q.options.b || '?'} | C) ${q.options.c || '?'} | D) ${q.options.d || '?'}`;
+                previewHTML += `A) ${a} | B) ${b} | C) ${c} | D) ${d}`;
                 previewHTML += `</p>`;
-                previewHTML += `<p style="color: #22C55E; margin: 3px 0; font-size: 12px;">✓ Correct: <strong>${(q.correct || '?').toUpperCase()}</strong></p>`;
+                previewHTML += `<p style="color: #22C55E; margin: 3px 0; font-size: 12px;">✓ Correct: <strong>${correctUpper}</strong></p>`;
                 previewHTML += `</div>`;
             });
 
