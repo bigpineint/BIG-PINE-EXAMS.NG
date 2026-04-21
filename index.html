@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Exam Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+     <link rel="icon"
+        href='data:image/svg+xml;utf8,
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+          <rect width="64" height="64" rx="14" fill="%230A1410"/>
+          <path d="M30 42h4v14h-4z" fill="%23DFFFEA"/>
+          <path d="M32 8c7 7 11 13 12.5 18.2.6 2-1 3.8-3.1 3.8H22.6c-2.1 0-3.7-1.8-3.1-3.8C21 21 25 15 32 8Z" fill="%2322C55E"/>
+          <path d="M32 20c9 7 14.2 13 16 17.8.7 2-1 4.2-3.2 4.2H19.2c-2.2 0-3.9-2.2-3.2-4.2C17.8 33 23 27 32 20Z" fill="%2316A34A"/>
+          <path d="M32 30c11 7.5 17 14 19 20 .8 2.2-1 4.5-3.4 4.5H16.4c-2.4 0-4.2-2.3-3.4-4.5 2-6 8-12.5 19-20Z" fill="%2386EFAC"/>
+        </svg>' />
+
+</head>
+<body>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #22C55E, #07110C);
+        }
+
+        .container{
+            width: 400px;
+            background: linear-gradient(to right, #333333, #000000);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .container h1{
+            text-align: center;
+            color: #22C55E;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-box{
+            position: relative;
+        }
+
+        .input-box input{
+            width: 100%;
+            padding: 12px 15px 12px 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            outline: none;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .input-box input:focus{
+            background: #fff;
+            border-color: #22C55E;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+        }
+
+        .input-box select{
+            width: 100%;
+            padding: 12px 15px 12px 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            outline: none;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .input-box select:focus{
+            background: #fff;
+            border-color: #22C55E;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+        }
+
+.input-box input::placeholder{
+            color: #999;
+        }
+
+        .btn{
+            width: 100%;
+            padding: 12px;
+            background: #22C55E;
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover{
+            background: #1ca34a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn:active{
+            transform: translateY(0);
+        }
+
+        .message{
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .message.success{
+            background: #22C55E;
+            color: #fff;
+            display: block;
+        }
+
+        .message.error{
+            background: #ef4444;
+            color: #fff;
+            display: block;
+        }
+
+    </style>
+
+    <div class="container">
+        <h1>Exam Login</h1>
+        <form id="loginForm">
+            <div class="input-box">
+                <input type="text" id="name" placeholder="Full Name">
+            </div>
+            <div class="input-box">
+                <select id="class">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <input type="text" id="subject" placeholder="Subject">
+            </div>
+            
+            <button type="submit" class="btn">Start Exam</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        // Browser compatibility - storage helper
+        const storage = {
+            data: {},
+            isAvailable: function() {
+                try {
+                    localStorage.setItem('__test__', '1');
+                    localStorage.removeItem('__test__');
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            getItem: function(key) {
+                if (this.isAvailable()) {
+                    return localStorage.getItem(key);
+                }
+                return this.data[key] || null;
+            },
+            setItem: function(key, value) {
+                if (this.isAvailable()) {
+                    localStorage.setItem(key, value);
+                }
+                this.data[key] = value;
+            },
+            removeItem: function(key) {
+                if (this.isAvailable()) {
+                    localStorage.removeItem(key);
+                }
+                delete this.data[key];
+            }
+        };
+
+        window.addEventListener('load', function() {
+            loadClasses();
+        });
+
+        function loadClasses() {
+            const classes = JSON.parse(storage.getItem('examClasses')) || ['Basic 3', 'Basic 4', 'Basic 5', 'JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'];
+            const classSelect = document.getElementById('class');
+            
+            classSelect.innerHTML = '<option value="">Select Class</option>';
+            
+            classes.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c;
+                option.textContent = c;
+                classSelect.appendChild(option);
+            });
+            
+            if (classes.length === 0) {
+                classSelect.innerHTML = '<option value="">No classes - Contact teacher</option>';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const studentClass = document.getElementById('class').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const messageDiv = document.getElementById('message');
+            
+            // Clear message
+            messageDiv.innerHTML = '';
+            messageDiv.className = 'message';
+            
+            // Name validation - letters and spaces only, minimum 3 characters
+            const nameRegex = /^[a-zA-Z\s]{3,}$/;
+            if (!nameRegex.test(name)) {
+                messageDiv.textContent = '❌ Please enter a valid full name (letters only, minimum 3 characters)!';
+                messageDiv.className = 'message error';
+                return;
+            }
+            
+            // Class validation - must be from predefined list
+            const validClasses = ['Basic 3', 'Basic 4', 'Basic 5', 'JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'];
+            if (!studentClass || !validClasses.includes(studentClass)) {
+                messageDiv.textContent = '❌ Please select a valid class!';
+                messageDiv.className = 'message error';
+                return;
+            }
+            
+            // Subject validation - letters and spaces only, minimum 3 characters
+            const subjectRegex = /^[a-zA-Z\s]{3,}$/;
+            if (!subjectRegex.test(subject)) {
+                messageDiv.textContent = '❌ Please enter a valid subject (letters only, minimum 3 characters)!';
+                messageDiv.className = 'message error';
+                return;
+            }
+            
+            // Store student data
+            const studentData = {
+                name: name,
+                class: studentClass,
+                subject: subject,
+                loginTime: new Date().toLocaleString()
+            };
+            
+            storage.setItem('studentInfo', JSON.stringify(studentData));
+            
+            // Show success message
+            messageDiv.textContent = '✅ Welcome ' + name + '! Starting exam...';
+            messageDiv.className = 'message success';
+            
+            // Reset form
+            this.reset();
+            
+            // Redirect to exam page
+            setTimeout(() => {
+                window.location.href = 'exam.html';
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>
