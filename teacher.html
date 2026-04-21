@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Settings - Exam Management</title>
+    <link rel="icon"
+        href='data:image/svg+xml;utf8,
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+          <rect width="64" height="64" rx="14" fill="%230A1410"/>
+          <path d="M30 42h4v14h-4z" fill="%23DFFFEA"/>
+          <path d="M32 8c7 7 11 13 12.5 18.2.6 2-1 3.8-3.1 3.8H22.6c-2.1 0-3.7-1.8-3.1-3.8C21 21 25 15 32 8Z" fill="%2322C55E"/>
+          <path d="M32 20c9 7 14.2 13 16 17.8.7 2-1 4.2-3.2 4.2H19.2c-2.2 0-3.9-2.2-3.2-4.2C17.8 33 23 27 32 20Z" fill="%2316A34A"/>
+          <path d="M32 30c11 7.5 17 14 19 20 .8 2.2-1 4.5-3.4 4.5H16.4c-2.4 0-4.2-2.3-3.4-4.5 2-6 8-12.5 19-20Z" fill="%2386EFAC"/>
+        </svg>' />
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #22C55E, #07110C);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(to right, #333333, #000000);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #22C55E;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #22C55E;
+            margin-bottom: 10px;
+        }
+
+        .auth-section {
+            background: rgba(34, 197, 94, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .auth-input {
+            padding: 12px 20px;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 200px;
+            margin: 0 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #22C55E;
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .btn:hover {
+            background: #1ca34a;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #777;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #22C55E;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #22C55E;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .questions-list {
+            background: rgba(34, 197, 94, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .questions-list h2 {
+            color: #22C55E;
+            margin-bottom: 20px;
+        }
+
+        .question-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-left: 3px solid #22C55E;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .question-item h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .question-item p {
+            color: #bbb;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+
+        .question-item .options {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .question-item .options p {
+            margin: 3px 0;
+            font-size: 12px;
+        }
+
+        .question-item .correct-answer {
+            color: #22C55E;
+            font-weight: 600;
+        }
+
+        .question-item .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #22C55E;
+            color: #000;
+            display: block;
+        }
+
+        .message.error {
+            background: #ef4444;
+            color: #fff;
+            display: block;
+        }
+
+        .message.info {
+            background: #3b82f6;
+            color: #fff;
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .back-link {
+            color: #22C55E;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: 0.3s ease;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px solid #22C55E;
+            color: #22C55E;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #22C55E;
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    </style>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Login</a>
+
+        <div class="header">
+            <h1>⚙️ Teacher Settings</h1>
+            <p style="color: #bbb;">Manage exam questions</p>
+        </div>
+
+        <!-- Authentication -->
+        <div class="auth-section" id="authSection">
+            <p style="margin-bottom: 15px; color: #fff;">Enter teacher password to access settings</p>
+            <input type="password" id="teacherPassword" class="auth-input" placeholder="Teacher Password">
+            <button class="btn" onclick="authenticateTeacher()">Login</button>
+            <div id="authMessage" class="message" style="margin-top: 15px; text-align: left;"></div>
+        </div>
+
+        <!-- Main Settings (Hidden until authenticated) -->
+        <div id="mainSettings" class="hidden">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('addQuestion')">Add Question</button>
+                <button class="tab-btn" onclick="switchTab('viewQuestions')">View Questions</button>
+                <button class="tab-btn" onclick="switchTab('classes')">Classes</button>
+                <button class="tab-btn" onclick="switchTab('settings')">Exam Settings</button>
+            </div>
+
+            <!-- Add Question Tab -->
+            <div id="addQuestion" class="tab-content active">
+                <div style="background: rgba(34, 197, 94, 0.1); padding: 20px; border-radius: 8px;">
+                    <h2 style="color: #22C55E; margin-bottom: 20px;">Add New Question</h2>
+                    
+                    <div id="questionMessage" class="message"></div>
+                    
+                    <form id="questionForm">
+                        <div class="form-group">
+                            <label>Select Class *</label>
+                            <select id="questionClass" required>
+                                <option value="">Select class...</option>
+                                <option value="All">All Classes</option>
+                                <option value="Basic 3">Basic 3</option>
+                                <option value="Basic 4">Basic 4</option>
+                                <option value="Basic 5">Basic 5</option>
+                                <option value="JSS 1">JSS 1</option>
+                                <option value="JSS 2">JSS 2</option>
+                                <option value="JSS 3">JSS 3</option>
+                                <option value="SS 1">SS 1</option>
+                                <option value="SS 2">SS 2</option>
+                                <option value="SS 3">SS 3</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Question Text *</label>
+                            <textarea id="questionText" placeholder="Enter the question..." required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Option A *</label>
+                                <input type="text" id="optionA" placeholder="Enter option A..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Option B *</label>
+                                <input type="text" id="optionB" placeholder="Enter option B..." required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Option C *</label>
+                                <input type="text" id="optionC" placeholder="Enter option C..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Option D *</label>
+                                <input type="text" id="optionD" placeholder="Enter option D..." required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Correct Answer *</label>
+                            <select id="correctAnswer" required>
+                                <option value="">Select correct answer...</option>
+                                <option value="a">Option A</option>
+                                <option value="b">Option B</option>
+                                <option value="c">Option C</option>
+                                <option value="d">Option D</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">Add Question</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- View Questions Tab -->
+            <div id="viewQuestions" class="tab-content">
+                <div class="questions-list">
+                    <h2>Questions (<span id="questionCount">0</span>)</h2>
+                    <div id="questionsList">
+                        <p style="color: #bbb; text-align: center;">No questions added yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classes Tab -->
+            <div id="classes" class="tab-content">
+                <div style="background: rgba(34, 197, 94, 0.1); padding: 20px; border-radius: 8px;">
+                    <h2 style="color: #22C55E; margin-bottom: 20px;">Manage Classes</h2>
+                    
+                    <div class="form-group">
+                        <label>Add New Class</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="newClass" placeholder="Enter class name (e.g., Class 10, 10A)" style="flex: 1;">
+                            <button class="btn" onclick="addClass()" style="margin-top: 0; width: auto;">Add</button>
+                        </div>
+                    </div>
+
+                    <div id="classesMessage" class="message"></div>
+
+                    <div style="margin-top: 20px;">
+                        <h3 style="color: #22C55E; margin-bottom: 15px;">Available Classes</h3>
+                        <div id="classesList" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <p style="color: #bbb;">No classes added yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div style="background: rgba(34, 197, 94, 0.1); padding: 20px; border-radius: 8px;">
+                    <h2 style="color: #22C55E; margin-bottom: 20px;">Exam Settings</h2>
+                    
+                    <div class="form-group">
+                        <label>Exam Duration (Minutes)</label>
+                        <input type="number" id="examDuration" value="30" min="5" max="180">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Number of Questions to Show</label>
+                        <input type="number" id="numQuestions" value="3" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📄 Upload Questions (All File Types)</label>
+                        <input type="file" id="pdfUpload" accept=".pdf,.txt,.doc,.docx,.rtf,.md,.html,.htm,.csv,.json,.xml" style="padding: 10px; background: #fff; width: 100%; border-radius: 8px;">
+                        <p style="color: #bbb; font-size: 12px; margin-top: 8px;">Upload any file (PDF, Word, TXT, CSV, etc.) with questions. Format: Q1) Question text<br>A) Option<br>B) Option<br>C) Option<br>D) Option<br>Correct: A</p>
+                        <button class="btn" onclick="processPDF()" style="width: 100%; margin-top: 10px;">Process File</button>
+                        <div id="pdfMessage" class="message" style="margin-top: 10px;"></div>
+                        <div id="questionsPreview" style="display: none; margin-top: 15px; background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px; max-height: 400px; overflow-y: auto; border: 2px solid #22C55E;"></div>
+                        <button class="btn" id="importQuestionsBtn" onclick="importExtractedQuestions()" style="width: 100%; margin-top: 10px; display: none; background: #22C55E;">✓ Import These Questions</button>
+                    </div>
+
+                    <button class="btn" onclick="saveSettings()" style="width: 100%; margin-top: 15px;">Save Settings</button>
+                    
+                    <button class="btn btn-danger" onclick="clearAllData()" style="width: 100%; margin-top: 10px;">Clear All Data</button>
+                    
+                    <div id="settingsMessage" class="message" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="logoutTeacher()" style="width: 100%; margin-top: 30px;">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_PASSWORD = 'teacher123';
+
+        // Browser compatibility - storage helper
+        const storage = {
+            data: {},
+            isAvailable: function() {
+                try {
+                    localStorage.setItem('__test__', '1');
+                    localStorage.removeItem('__test__');
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            getItem: function(key) {
+                if (this.isAvailable()) {
+                    return localStorage.getItem(key);
+                }
+                return this.data[key] || null;
+            },
+            setItem: function(key, value) {
+                if (this.isAvailable()) {
+                    localStorage.setItem(key, value);
+                }
+                this.data[key] = value;
+            },
+            removeItem: function(key) {
+                if (this.isAvailable()) {
+                    localStorage.removeItem(key);
+                }
+                delete this.data[key];
+            }
+        };
+
+        // Check if teacher is already authenticated
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('teacherAuthenticated') === 'true') {
+                showMainSettings();
+                loadQuestions();
+                loadSettings();
+            }
+        });
+
+        function authenticateTeacher() {
+            const password = document.getElementById('teacherPassword').value.trim();
+            const message = document.getElementById('authMessage');
+
+            if (!password) {
+                message.textContent = '❌ Please enter a password';
+                message.className = 'message error';
+                return;
+            }
+
+            if (password === TEACHER_PASSWORD) {
+                message.textContent = '✅ Authentication successful!';
+                message.className = 'message success';
+                sessionStorage.setItem('teacherAuthenticated', 'true');
+                
+                setTimeout(() => {
+                    showMainSettings();
+                    loadQuestions();
+                    loadSettings();
+                }, 1000);
+            } else {
+                message.textContent = '❌ Incorrect password';
+                message.className = 'message error';
+            }
+        }
+
+        function showMainSettings() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('mainSettings').classList.remove('hidden');
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load questions when switching to view tab
+            if (tabName === 'viewQuestions') {
+                loadQuestions();
+            }
+            
+            // Show added questions in Add Question tab
+            if (tabName === 'addQuestion') {
+                showAddedQuestions();
+            }
+        }
+
+        // Handle question form submission
+        document.getElementById('questionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const questionClass = document.getElementById('questionClass').value;
+            const question = {
+                id: Date.now(),
+                class: questionClass,
+                text: document.getElementById('questionText').value.trim(),
+                options: {
+                    a: document.getElementById('optionA').value.trim(),
+                    b: document.getElementById('optionB').value.trim(),
+                    c: document.getElementById('optionC').value.trim(),
+                    d: document.getElementById('optionD').value.trim()
+                },
+                correct: document.getElementById('correctAnswer').value
+            };
+
+            // Validation
+            if (!questionClass || !question.text || !question.options.a || !question.options.b || !question.options.c || !question.options.d || !question.correct) {
+                document.getElementById('questionMessage').textContent = '❌ Please fill in all fields';
+                document.getElementById('questionMessage').className = 'message error';
+                return;
+            }
+
+            // Get existing questions
+            let questions = JSON.parse(storage.getItem('examQuestions')) || [];
+            questions.push(question);
+            storage.setItem('examQuestions', JSON.stringify(questions));
+
+            // Success message
+            document.getElementById('questionMessage').textContent = '✅ Question added successfully!';
+            document.getElementById('questionMessage').className = 'message success';
+
+            // Reset form
+            this.reset();
+
+            // Show added questions in the form area
+            showAddedQuestions();
+            
+            // Update question list
+            loadQuestions();
+
+            setTimeout(() => {
+                document.getElementById('questionMessage').className = 'message';
+            }, 3000);
+        });
+
+        function showAddedQuestions() {
+            const questions = JSON.parse(storage.getItem('examQuestions')) || [];
+            const container = document.getElementById('questionForm');
+            
+            let questionsDiv = document.getElementById('addedQuestionsList');
+            if (!questionsDiv) {
+                questionsDiv = document.createElement('div');
+                questionsDiv.id = 'addedQuestionsList';
+                questionsDiv.style.marginTop = '20px';
+                questionsDiv.style.padding = '15px';
+                questionsDiv.style.background = 'rgba(34, 197, 94, 0.1)';
+                questionsDiv.style.borderRadius = '8px';
+                container.parentNode.insertBefore(questionsDiv, container.nextSibling);
+            }
+            
+            const recentQuestions = questions.slice(-5).reverse();
+            let html = '<h4 style="color: #22C55E; margin-bottom: 10px;">Recently Added Questions:</h4>';
+            
+            if (questions.length === 0) {
+                html = '<p style="color: #bbb;">No questions added yet</p>';
+            } else {
+                recentQuestions.forEach((q, idx) => {
+                    html += `<div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 8px 0; border-radius: 6px; border-left: 3px solid #22C55E;">
+                        <p style="color: #22C55E; font-size: 12px; margin-bottom: 5px;">📚 ${q.class || 'All'} | Q${questions.length - idx}</p>
+                        <p style="color: #fff; font-size: 14px;">${q.text}</p>
+                        <div style="color: #aaa; font-size: 12px; margin-top: 5px;">
+                            <span style="color: ${q.correct === 'a' ? '#22C55E' : '#aaa'};">A) ${q.options.a}</span> | 
+                            <span style="color: ${q.correct === 'b' ? '#22C55E' : '#aaa'};">B) ${q.options.b}</span> | 
+                            <span style="color: ${q.correct === 'c' ? '#22C55E' : '#aaa'};">C) ${q.options.c}</span> | 
+                            <span style="color: ${q.correct === 'd' ? '#22C55E' : '#aaa'};">D) ${q.options.d}</span>
+                        </div>
+                        <p style="color: #22C55E; font-size: 12px; margin-top: 5px;">✓ Correct: ${q.correct.toUpperCase()}</p>
+                    </div>`;
+                });
+                if (questions.length > 5) {
+                    html += `<p style="color: #bbb; font-size: 12px; text-align: center;">...and ${questions.length - 5} more</p>`;
+                }
+            }
+            
+            questionsDiv.innerHTML = html;
+        }
+
+        function loadQuestions() {
+            const questions = JSON.parse(storage.getItem('examQuestions')) || [];
+            const questionsList = document.getElementById('questionsList');
+            const questionCount = document.getElementById('questionCount');
+
+            questionCount.textContent = questions.length;
+
+            if (questions.length === 0) {
+                questionsList.innerHTML = '<p style="color: #bbb; text-align: center;">No questions added yet</p>';
+                return;
+            }
+
+            questionsList.innerHTML = questions.map((q, index) => `
+                <div class="question-item">
+                    <h3>Question ${index + 1}</h3>
+                    <p style="color: #22C55E; font-size: 12px;">📚 Class: <strong>${q.class || 'All'}</p>
+                    <p><strong>${q.text}</strong></p>
+                    <div class="options">
+                        <p>A) ${q.options.a}</p>
+                        <p>B) ${q.options.b}</p>
+                        <p>C) ${q.options.c}</p>
+                        <p>D) ${q.options.d}</p>
+                    </div>
+                    <p class="correct-answer">Correct Answer: ${q.correct.toUpperCase()}</p>
+                    <div class="actions">
+                        <button class="btn btn-danger" onclick="deleteQuestion(${q.id})" style="padding: 8px 15px; font-size: 12px;">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteQuestion(questionId) {
+            if (confirm('Are you sure you want to delete this question?')) {
+                let questions = JSON.parse(storage.getItem('examQuestions')) || [];
+                questions = questions.filter(q => q.id !== questionId);
+                storage.setItem('examQuestions', JSON.stringify(questions));
+                loadQuestions();
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                examDuration: document.getElementById('examDuration').value,
+                numQuestions: document.getElementById('numQuestions').value
+            };
+
+            storage.setItem('examSettings', JSON.stringify(settings));
+
+            const message = document.getElementById('settingsMessage');
+            message.textContent = '✅ Settings saved successfully!';
+            message.className = 'message success';
+
+            setTimeout(() => {
+                message.className = 'message';
+            }, 3000);
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(storage.getItem('examSettings')) || {
+                examDuration: 1,
+                numQuestions: 3
+            };
+
+            document.getElementById('examDuration').value = settings.examDuration;
+            document.getElementById('numQuestions').value = settings.numQuestions;
+            
+            // Initialize default classes if not exist
+            let classes = JSON.parse(storage.getItem('examClasses'));
+            if (!classes || classes.length === 0) {
+                const defaultClasses = ['Basic 3', 'Basic 4', 'Basic 5', 'JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'];
+                storage.setItem('examClasses', JSON.stringify(defaultClasses));
+            }
+            
+            // Initialize default questions if none exist
+            let questions = JSON.parse(storage.getItem('examQuestions'));
+            if (!questions || questions.length === 0) {
+                const defaultQuestions = [
+                    { id: 1, class: 'Basic 3', text: 'What is 5 + 3?', options: { a: '6', b: '7', c: '8', d: '9' }, correct: 'c' },
+                    { id: 2, class: 'Basic 3', text: 'What is 10 - 4?', options: { a: '4', b: '5', c: '6', d: '7' }, correct: 'c' },
+                    { id: 3, class: 'Basic 3', text: 'How many letters are in the word "CAT"?', options: { a: '2', b: '3', c: '4', d: '5' }, correct: 'b' },
+                    { id: 4, class: 'Basic 4', text: 'What is 12 × 2?', options: { a: '22', b: '24', c: '26', d: '28' }, correct: 'b' },
+                    { id: 5, class: 'Basic 4', text: 'What is 36 ÷ 6?', options: { a: '4', b: '5', c: '6', d: '7' }, correct: 'c' },
+                    { id: 6, class: 'Basic 4', text: 'What is the next number after 99?', options: { a: '100', b: '101', c: '98', d: '90' }, correct: 'a' },
+                    { id: 7, class: 'Basic 5', text: 'What is 125 ÷ 5?', options: { a: '20', b: '25', c: '30', d: '35' }, correct: 'b' },
+                    { id: 8, class: 'Basic 5', text: 'What is 15 × 4?', options: { a: '50', b: '55', c: '60', d: '65' }, correct: 'c' },
+                    { id: 9, class: 'Basic 5', text: 'What is 1000 - 1?', options: { a: '990', b: '999', c: '1001', d: '900' }, correct: 'b' },
+                    { id: 10, class: 'JSS 1', text: 'What is the square root of 64?', options: { a: '6', b: '7', c: '8', d: '9' }, correct: 'c' },
+                    { id: 11, class: 'JSS 1', text: 'Simplify: 3x + 2x', options: { a: '5x', b: '6x', c: '4x', d: '5x²' }, correct: 'a' },
+                    { id: 12, class: 'JSS 1', text: 'What is 2³?', options: { a: '6', b: '8', c: '9', d: '12' }, correct: 'b' },
+                    { id: 13, class: 'JSS 2', text: 'If x = 3, what is 2x + 5?', options: { a: '8', b: '9', c: '11', d: '13' }, correct: 'c' },
+                    { id: 14, class: 'JSS 2', text: 'What is the value of π (pi)?', options: { a: '3.14', b: '3.41', c: '4.13', d: '2.13' }, correct: 'a' },
+                    { id: 15, class: 'JSS 2', text: 'Factorize: x² - 9', options: { a: '(x-3)(x+3)', b: '(x-3)²', c: '(x+3)²', d: '(x-9)(x+1)' }, correct: 'a' },
+                    { id: 16, class: 'JSS 3', text: 'What is the formula for area of a circle?', options: { a: 'πr²', b: '2πr', c: 'πd', d: 'πr³' }, correct: 'a' },
+                    { id: 17, class: 'JSS 3', text: 'Solve: 2(x + 3) = 12', options: { a: 'x = 3', b: 'x = 4', c: 'x = 5', d: 'x = 6' }, correct: 'a' },
+                    { id: 18, class: 'JSS 3', text: 'What is the sum of angles in a triangle?', options: { a: '90°', b: '180°', c: '270°', d: '360°' }, correct: 'b' },
+                    { id: 19, class: 'SS 1', text: 'What is the capital of Nigeria?', options: { a: 'Lagos', b: 'Abuja', c: 'Kano', d: 'Port Harcourt' }, correct: 'b' },
+                    { id: 20, class: 'SS 1', text: 'What is H2O commonly known as?', options: { a: 'Salt', b: 'Water', c: 'Sugar', d: 'Oxygen' }, correct: 'b' },
+                    { id: 21, class: 'SS 1', text: 'Who wrote the Nigerian National Anthem?', options: { a: 'Wole Soyinka', b: 'John P. O. Echend', c: 'Chinua Achebe', d: 'Fela Kuti' }, correct: 'b' },
+                    { id: 22, class: 'SS 2', text: 'What is Newton\'s first law also known as?', options: { a: 'Law of Energy', b: 'Law of Inertia', c: 'Law of Gravity', d: 'Law of Motion' }, correct: 'b' },
+                    { id: 23, class: 'SS 2', text: 'What is the chemical symbol for Sodium?', options: { a: 'So', b: 'Sd', c: 'Na', d: 'S' }, correct: 'c' },
+                    { id: 24, class: 'SS 2', text: 'In which year did Nigeria gain independence?', options: { a: '1957', b: '1960', c: '1963', d: '1970' }, correct: 'b' },
+                    { id: 25, class: 'SS 3', text: 'What is the formula for kinetic energy?', options: { a: '½mv', b: '½mv²', c: 'mv²', d: 'mgh' }, correct: 'b' },
+                    { id: 26, class: 'SS 3', text: 'Who is the current President of Nigeria?', options: { a: 'Goodluck Jonathan', b: 'Muhammadu Buhari', c: 'Bola Tinubu', d: 'Atiku Abubakar' }, correct: 'c' },
+                    { id: 27, class: 'SS 3', text: 'What is the square root of 144?', options: { a: '10', b: '11', c: '12', d: '14' }, correct: 'c' }
+                ];
+                storage.setItem('examQuestions', JSON.stringify(defaultQuestions));
+            }
+            
+            loadClasses();
+        }
+
+        function addClass() {
+            const newClass = document.getElementById('newClass').value.trim();
+            const message = document.getElementById('classesMessage');
+
+            if (!newClass) {
+                message.textContent = '❌ Please enter a class name';
+                message.className = 'message error';
+                return;
+            }
+
+            let classes = JSON.parse(storage.getItem('examClasses')) || [];
+            
+            if (classes.includes(newClass)) {
+                message.textContent = '❌ Class already exists';
+                message.className = 'message error';
+                return;
+            }
+
+            classes.push(newClass);
+            storage.setItem('examClasses', JSON.stringify(classes));
+            
+            message.textContent = '✅ Class added successfully!';
+            message.className = 'message success';
+            
+            document.getElementById('newClass').value = '';
+            loadClasses();
+
+            setTimeout(() => {
+                message.className = 'message';
+            }, 3000);
+        }
+
+        function loadClasses() {
+            let classes = JSON.parse(storage.getItem('examClasses')) || [];
+            const classesList = document.getElementById('classesList');
+
+            if (classes.length === 0) {
+                classesList.innerHTML = '<p style="color: #bbb;">No classes added yet</p>';
+                return;
+            }
+
+            classesList.innerHTML = classes.map(c => `
+                <div style="background: rgba(34, 197, 94, 0.2); padding: 8px 15px; border-radius: 6px; display: flex; align-items: center; gap: 10px;">
+                    <span style="color: #fff; font-weight: 500;">${c}</span>
+                    <button onclick="deleteClass('${c}')" style="background: #ef4444; color: #fff; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px;">✕</button>
+                </div>
+            `).join('');
+        }
+
+function deleteClass(className) {
+            if (confirm('Delete class "' + className + '"?')) {
+                let classes = JSON.parse(storage.getItem('examClasses')) || [];
+                classes = classes.filter(c => c !== className);
+                storage.setItem('examClasses', JSON.stringify(classes));
+                loadClasses();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure? This will delete ALL questions, classes and cannot be undone!')) {
+                storage.removeItem('examQuestions');
+                storage.removeItem('examSettings');
+                storage.removeItem('examClasses');
+                storage.removeItem('studentInfo');
+                storage.removeItem('examResults');
+                
+                // Reset to defaults: 1 minute timer
+                const settings = { examDuration: 1, numQuestions: 3 };
+                storage.setItem('examSettings', JSON.stringify(settings));
+                
+                const message = document.getElementById('settingsMessage');
+                message.textContent = '✅ All data cleared and reset to defaults (1 minute)';
+                message.className = 'message success';
+                
+                loadQuestions();
+                loadSettings();
+            }
+        }
+
+        let extractedQuestions = [];
+
+        function processPDF() {
+            const fileInput = document.getElementById('pdfUpload');
+            const file = fileInput.files[0];
+            const message = document.getElementById('pdfMessage');
+            const preview = document.getElementById('questionsPreview');
+            const importBtn = document.getElementById('importQuestionsBtn');
+
+            if (!file) {
+                message.textContent = '❌ Please select a file';
+                message.className = 'message error';
+                preview.style.display = 'none';
+                importBtn.style.display = 'none';
+                return;
+            }
+
+            const fileName = file.name.toLowerCase();
+            
+            if (fileName.endsWith('.txt') || fileName.endsWith('.md') || fileName.endsWith('.rtf')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const text = e.target.result;
+                        extractedQuestions = parseQuestionsFromText(text);
+                        displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                    } catch (err) {
+                        message.textContent = '❌ Error reading file: ' + err.message;
+                        message.className = 'message error';
+                        preview.style.display = 'none';
+                        importBtn.style.display = 'none';
+                    }
+                };
+                reader.readAsText(file);
+            } else if (fileName.endsWith('.pdf')) {
+                processPDFJS(file, message, preview, importBtn);
+            } else if (fileName.endsWith('.docx')) {
+                processDOCX(file, message, preview, importBtn);
+            } else if (fileName.endsWith('.doc')) {
+                processDOC(file, message, preview, importBtn);
+            } else if (fileName.endsWith('.html') || fileName.endsWith('.htm')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+                    extractedQuestions = parseQuestionsFromText(text);
+                    displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                };
+                reader.readAsText(file);
+            } else if (fileName.endsWith('.csv') || fileName.endsWith('.json') || fileName.endsWith('.xml')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        let text = e.target.result;
+                        if (fileName.endsWith('.json')) {
+                            try {
+                                const data = JSON.parse(text);
+                                extractedQuestions = parseQuestionsFromJSON(data);
+                            } catch (jsonErr) {
+                                text = JSON.stringify(data);
+                                extractedQuestions = parseQuestionsFromText(text);
+                            }
+                        } else if (fileName.endsWith('.csv')) {
+                            extractedQuestions = parseQuestionsFromCSV(text);
+                        } else if (fileName.endsWith('.xml')) {
+                            text = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+                            extractedQuestions = parseQuestionsFromText(text);
+                        }
+                        if (extractedQuestions.length > 0) {
+                            displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                        } else {
+                            message.textContent = '❌ No questions found. Try plain text format.';
+                            message.className = 'message error';
+                        }
+                    } catch (err) {
+                        message.textContent = '❌ Error reading file: ' + err.message;
+                        message.className = 'message error';
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const text = e.target.result;
+                        extractedQuestions = parseQuestionsFromText(text);
+                        if (extractedQuestions.length > 0) {
+                            displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                        } else {
+                            message.textContent = '❌ No questions found in file. Try a different format or check the file content.';
+                            message.className = 'message error';
+                        }
+                    } catch (err) {
+                        message.textContent = '❌ Error reading file: ' + err.message;
+                        message.className = 'message error';
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function processPDFJS(file, message, preview, importBtn) {
+            if (!window.pdfjsLib) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = function() {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        extractPDFText(e.target.result, message, preview, importBtn);
+                    };
+                    reader.readAsArrayBuffer(file);
+                };
+                script.onerror = function() {
+                    message.textContent = '❌ Could not load PDF processor. Please use another file format.';
+                    message.className = 'message error';
+                    preview.style.display = 'none';
+                    importBtn.style.display = 'none';
+                };
+                document.head.appendChild(script);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    extractPDFText(e.target.result, message, preview, importBtn);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function processDOCX(file, message, preview, importBtn) {
+            if (!window.mammoth) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+                script.onload = function() {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        mammoth.extractRawText({arrayBuffer: e.target.result})
+                            .then(function(result) {
+                                extractedQuestions = parseQuestionsFromText(result.value);
+                                displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                            })
+                            .catch(function(err) {
+                                message.textContent = '❌ Error reading DOCX: ' + err.message;
+                                message.className = 'message error';
+                            });
+                    };
+                    reader.readAsArrayBuffer(file);
+                };
+                script.onerror = function() {
+                    message.textContent = '❌ Could not load DOCX processor. Trying as plain text...';
+                    message.className = 'message info';
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        extractedQuestions = parseQuestionsFromText(e.target.result);
+                        displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                    };
+                    reader.readAsText(file);
+                };
+                document.head.appendChild(script);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    mammoth.extractRawText({arrayBuffer: e.target.result})
+                        .then(function(result) {
+                            extractedQuestions = parseQuestionsFromText(result.value);
+                            displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                        })
+                        .catch(function(err) {
+                            message.textContent = '❌ Error reading DOCX: ' + err.message;
+                            message.className = 'message error';
+                        });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function processDOC(file, message, preview, importBtn) {
+            message.textContent = '⏳ Processing .doc file (this may take a moment)...';
+            message.className = 'message info';
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const arrayBuffer = e.target.result;
+                if (!window.mammoth) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+                    script.onload = function() {
+                        mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                            .then(function(result) {
+                                extractedQuestions = parseQuestionsFromText(result.value);
+                                displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                            })
+                            .catch(function() {
+                                const text = new TextDecoder('utf-8').decode(arrayBuffer).replace(/[^\x20-\x7E]/g, ' ');
+                                extractedQuestions = parseQuestionsFromText(text);
+                                displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                            });
+                    };
+                    document.head.appendChild(script);
+                } else {
+                    mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                        .then(function(result) {
+                            extractedQuestions = parseQuestionsFromText(result.value);
+                            displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                        })
+                        .catch(function() {
+                            const text = new TextDecoder('utf-8').decode(arrayBuffer).replace(/[^\x20-\x7E]/g, ' ');
+                            extractedQuestions = parseQuestionsFromText(text);
+                            displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                        });
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function extractPDFText(arrayBuffer, message, preview, importBtn) {
+            pdfjsLib.getDocument(arrayBuffer).promise.then(pdf => {
+                let text = '';
+                let pageCount = pdf.numPages;
+                let pagesProcessed = 0;
+
+                for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+                    pdf.getPage(pageNum).then(page => {
+                        page.getTextContent().then(content => {
+                            text += content.items.map(item => item.str).join(' ') + '\n';
+                            pagesProcessed++;
+                            if (pagesProcessed === pageCount) {
+                                extractedQuestions = parseQuestionsFromText(text);
+                                displayQuestionsPreview(extractedQuestions, message, preview, importBtn);
+                            }
+                        });
+                    });
+                }
+            }).catch(err => {
+                message.textContent = '❌ Error reading PDF: ' + err.message;
+                message.className = 'message error';
+                preview.style.display = 'none';
+                importBtn.style.display = 'none';
+            });
+        }
+
+        function parseQuestionsFromText(text) {
+            const questions = [];
+            text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            let currentQuestion = null;
+            let optionsFound = 0;
+            
+            // Detect class from first lines
+            let detectedClass = 'All';
+            const classPatterns = [
+                /^Class\s*[:=]\s*(Basic\s*\d+|SS\s*\d+)/i,
+                /^Form\s*[:=]\s*(\d+)/i,
+                /^Grade\s*[:=]\s*(\d+)/i
+            ];
+            
+            for (let i = 0; i < Math.min(5, lines.length); i++) {
+                for (const pattern of classPatterns) {
+                    const match = lines[i].match(pattern);
+                    if (match) {
+                        detectedClass = match[1];
+                        break;
+                    }
+                }
+            }
+
+            const questionPatterns = [
+                /^Q\s*\.?\s*(\d+)\)?[:\.\-]?\s*/i,
+                /^Question\s+(\d+)[\.\:\-]?\s*/i,
+                /^\d+[\.\:\-]\s*/,
+                /^Q\d+[\.\:\-]\s*/i
+            ];
+
+            const optionPatterns = [
+                /^[A-D]\s*[\.\)\:\-]\s*/i,
+                /^Option\s+[A-D]\s*[\.\)\:\-]?\s*/i,
+                /^([A-D])\s*[\.\)\:\-]\s*/i
+            ];
+
+            const correctPatterns = [
+                /^Correct\s*[:=]\s*([A-D])/i,
+                /^Answer\s*[:=]\s*([A-D])/i,
+                /^Key\s*[:=]\s*([A-D])/i,
+                /^Answer\s+Key\s*[:=]\s*([A-D])/i,
+                /^\([A-D]\)$/,
+                /^\*[A-D]\*?$/
+            ];
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                let isQuestionStart = false;
+
+                for (const pattern of questionPatterns) {
+                    if (pattern.test(line)) {
+                        if (currentQuestion && optionsFound >= 2) {
+                            questions.push(currentQuestion);
+                        }
+                        let qText = line;
+                        for (const p of questionPatterns) {
+                            qText = qText.replace(p, '');
+                        }
+                        currentQuestion = {
+                            text: qText.trim(),
+                            class: detectedClass,
+                            options: {}
+                        };
+                        optionsFound = 0;
+                        isQuestionStart = true;
+                        break;
+                    }
+                }
+
+                if (isQuestionStart) continue;
+
+                if (currentQuestion) {
+                    let isOption = false;
+                    for (const pattern of optionPatterns) {
+                        const match = line.match(pattern);
+                        if (match) {
+                            const optKey = line[0].toLowerCase();
+                            let optText = line.replace(pattern, '').trim();
+                            if (!currentQuestion.options[optKey]) {
+                                currentQuestion.options[optKey] = optText;
+                                optionsFound++;
+                                isOption = true;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (isOption) continue;
+
+                    for (const pattern of correctPatterns) {
+                        const match = line.match(pattern);
+                        if (match) {
+                            currentQuestion.correct = match[1].toLowerCase();
+                            break;
+                        }
+                    }
+
+                    if (line.match(/^Answer\s*[:=]/i) || line.match(/^Correct\s*[:=]/i) || line.match(/^\([a-d]\)/i)) {
+                        continue;
+                    }
+
+                    if (!currentQuestion.correct && (line.toLowerCase().includes('answer is') || line.toLowerCase().includes('correct answer is'))) {
+                        const ansMatch = line.match(/[A-D]/i);
+                        if (ansMatch) {
+                            currentQuestion.correct = ansMatch[0].toLowerCase();
+                        }
+                    }
+                }
+            }
+
+            if (currentQuestion && optionsFound >= 2) {
+                questions.push(currentQuestion);
+            }
+
+            return questions;
+        }
+
+        function parseQuestionsFromCSV(text) {
+            const questions = [];
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            
+            for (const line of lines) {
+                const parts = line.split(',').map(p => p.trim().replace(/^["']|["']$/g, ''));
+                if (parts.length >= 5) {
+                    questions.push({
+                        text: parts[0],
+                        options: {
+                            a: parts[1],
+                            b: parts[2],
+                            c: parts[3],
+                            d: parts[4]
+                        },
+                        correct: (parts[5] || 'a').toLowerCase(),
+                        class: parts[6] || 'All'
+                    });
+                }
+            }
+            return questions;
+        }
+
+        function parseQuestionsFromJSON(data) {
+            const questions = [];
+            const arr = Array.isArray(data) ? data : (data.questions || data.items || []);
+            
+            for (const item of arr) {
+                if (item.question || item.text) {
+                    questions.push({
+                        text: item.question || item.text,
+                        class: item.class || item.form || item.grade || 'All',
+                        options: item.options || item.choices || {
+                            a: item.a || item.optionA || '',
+                            b: item.b || item.optionB || '',
+                            c: item.c || item.optionC || '',
+                            d: item.d || item.optionD || ''
+                        },
+                        correct: item.correct || item.answer || item.correctAnswer || 'a'
+                    });
+                }
+            }
+            return questions;
+        }
+
+        function displayQuestionsPreview(questions, message, preview, importBtn) {
+            if (questions.length === 0) {
+                message.textContent = '❌ No questions found. Make sure the format is correct.';
+                message.className = 'message error';
+                preview.style.display = 'none';
+                importBtn.style.display = 'none';
+                return;
+            }
+
+            let previewHTML = `<h3 style="color: #22C55E; margin-top: 0;">Found ${questions.length} Questions:</h3>`;
+            questions.forEach((q, idx) => {
+                previewHTML += `<div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 8px 0; border-radius: 6px;">`;
+                previewHTML += `<p style="color: #22C55E; margin: 5px 0; font-weight: 600;">Q${idx + 1}) ${q.text || 'No text'}</p>`;
+                previewHTML += `<p style="color: #22C55E; margin: 3px 0; font-size: 12px;">📚 Class: <strong>${q.class || 'All'}</strong></p>`;
+                previewHTML += `<p style="color: #ddd; margin: 3px 0; font-size: 12px;">`;
+                previewHTML += `A) ${q.options.a || '?'} | B) ${q.options.b || '?'} | C) ${q.options.c || '?'} | D) ${q.options.d || '?'}`;
+                previewHTML += `</p>`;
+                previewHTML += `<p style="color: #22C55E; margin: 3px 0; font-size: 12px;">✓ Correct: <strong>${(q.correct || '?').toUpperCase()}</strong></p>`;
+                previewHTML += `</div>`;
+            });
+
+            message.textContent = `✓ Successfully parsed ${questions.length} questions!`;
+            message.className = 'message success';
+            preview.innerHTML = previewHTML;
+            preview.style.display = 'block';
+            importBtn.style.display = 'block';
+        }
+
+        function importExtractedQuestions() {
+            if (extractedQuestions.length === 0) {
+                alert('No questions to import');
+                return;
+            }
+
+            let existingQuestions = JSON.parse(storage.getItem('examQuestions') || '[]');
+            let addedCount = 0;
+
+            extractedQuestions.forEach(q => {
+                const newQuestion = {
+                    id: Date.now() + Math.random(),
+                    text: q.text,
+                    question: q.text,
+                    options: q.options,
+                    correct: q.correct
+                };
+                existingQuestions.push(newQuestion);
+                addedCount++;
+            });
+
+            storage.setItem('examQuestions', JSON.stringify(existingQuestions));
+            alert(`✓ Successfully imported ${addedCount} questions!`);
+            document.getElementById('pdfUpload').value = '';
+            document.getElementById('questionsPreview').style.display = 'none';
+            document.getElementById('importQuestionsBtn').style.display = 'none';
+            document.getElementById('pdfMessage').textContent = '';
+            loadQuestions();
+        }
+
+        function logoutTeacher() {
+            sessionStorage.removeItem('teacherAuthenticated');
+            document.getElementById('mainSettings').classList.add('hidden');
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('teacherPassword').value = '';
+            document.getElementById('authMessage').className = 'message';
+            document.getElementById('authMessage').textContent = '';
+        }
+    </script>
+
+</body>
+</html>
