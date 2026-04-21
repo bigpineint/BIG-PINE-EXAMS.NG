@@ -287,6 +287,11 @@
             margin: 0;
         }
 
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         .settings-link {
             color: #22C55E;
             text-decoration: none;
@@ -303,13 +308,33 @@
             background: rgba(34, 197, 94, 0.3);
         }
 
+        .clear-btn {
+            color: #ef4444;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 15px;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 6px;
+            border: 1px solid #ef4444;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
     </style>
 
     <div class="container">
         <div class="header">
             <div class="header-top">
                 <h1>📝 Exam</h1>
-                <a href="teacher.html" class="settings-link">⚙️ Settings</a>
+                <div class="header-actions">
+                    <a href="teacher.html" class="settings-link">⚙️ Settings</a>
+                    <button class="clear-btn" onclick="clearAllData()">🗑️ Clear Data</button>
+                </div>
             </div>
             <div class="timer">Time: <span id="timer">30:00</span></div>
         </div>
@@ -474,8 +499,8 @@
             
             displayQuestion();
             
-            // Load timer from settings
-            const settings = JSON.parse(storage.getItem('examSettings')) || { examDuration: 30 };
+            // Load timer from settings (default 1 minute)
+            const settings = JSON.parse(storage.getItem('examSettings')) || { examDuration: 1 };
             timeLeft = parseInt(settings.examDuration) * 60;
             
             startTimer();
@@ -502,7 +527,7 @@
                         (minutes < 10 ? '0' : '') + minutes + ':' + 
                         (seconds < 10 ? '0' : '') + seconds;
                     
-                    let settings = JSON.parse(storage.getItem('examSettings')) || { examDuration: 30 };
+                    let settings = JSON.parse(storage.getItem('examSettings')) || { examDuration: 1 };
                     let totalTime = parseInt(settings.examDuration) * 60;
                     let progress = ((totalTime - timeLeft) / totalTime) * 100;
                     document.getElementById('progressBar').style.width = progress + '%';
@@ -531,14 +556,32 @@
             optionsContainer.innerHTML = '';
 
             const optionLetters = ['A', 'B', 'C', 'D'];
-            (q.options || Object.values(q.options)).forEach((option, index) => {
+            
+            // Build options list that works with both array and object formats
+            let optionsList = [];
+            if (Array.isArray(q.options)) {
+                optionLetters.forEach((letter, idx) => {
+                    if (q.options[idx]) {
+                        optionsList.push({ letter: letter, text: q.options[idx] });
+                    }
+                });
+            } else {
+                optionLetters.forEach(letter => {
+                    const key = letter.toLowerCase();
+                    if (q.options && q.options[key]) {
+                        optionsList.push({ letter: letter, text: q.options[key] });
+                    }
+                });
+            }
+            
+            optionsList.forEach((opt, index) => {
                 const div = document.createElement('div');
                 div.className = 'option';
-                div.setAttribute('data-option', String.fromCharCode(97 + index));
-                div.textContent = optionLetters[index] + ') ' + option;
+                div.setAttribute('data-option', opt.letter.toLowerCase());
+                div.textContent = opt.letter + ') ' + opt.text;
                 div.onclick = function() { selectOption(this); };
 
-                if (answers[currentQuestionIndex] === String.fromCharCode(97 + index)) {
+                if (answers[currentQuestionIndex] === opt.letter.toLowerCase()) {
                     div.classList.add('selected');
                 }
 
@@ -599,7 +642,7 @@
 
             storage.setItem('examResults', JSON.stringify(results));
 
-            // Create answer review - hide correct answers
+            // Create answer review - hide correct answers (original behavior)
             let reviewHTML = '';
             const optionLetters = ['A', 'B', 'C', 'D'];
             questions.forEach((q, index) => {
@@ -615,7 +658,7 @@
                         <p style="color: ${isCorrect ? '#22C55E' : '#ef4444'}; margin: 5px 0;">${isCorrect ? '✓' : '✗'} Your Answer: <strong>${userAnswer}) ${userAnswerText}</strong></p>
                     </div>
                 `;
-            });
+});
 
             document.getElementById('answersReview').innerHTML = reviewHTML;
 
@@ -627,6 +670,22 @@
 
         function goBack() {
             window.location.href = 'index.html';
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure? This will delete ALL questions, settings and reset to defaults!')) {
+                // Clear all storage
+                localStorage.removeItem('examQuestions');
+                localStorage.removeItem('examSettings');
+                localStorage.removeItem('examClasses');
+                localStorage.removeItem('studentInfo');
+                localStorage.removeItem('examResults');
+                storage.data = {};
+                
+                // Reload page to reset state
+                alert('✅ All data cleared! Redirecting to login...');
+                window.location.href = 'index.html';
+            }
         }
 
         // Keyboard shortcuts
